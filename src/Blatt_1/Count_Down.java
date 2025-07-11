@@ -1,5 +1,5 @@
 //Count_Down Java
-public class CountDown {   // Klassenname (Modul) entspricht Dateiname 
+public class Count_Down {   // Klassenname (Modul) entspricht Dateiname 
     public static void main(String[] args) {  // Standard Hauptprogram 
         int i=10;                                  // declare variable 
         while (i>0) {                   // while loop (for simplicity) 
