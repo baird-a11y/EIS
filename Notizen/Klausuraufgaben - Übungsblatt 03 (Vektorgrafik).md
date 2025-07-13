@@ -1,4 +1,3 @@
-
 # Aufgabe 1: Koordinaten-Transformationen (15 Punkte)
 
 ### a) Grundlegende Transformation (5 Punkte)
