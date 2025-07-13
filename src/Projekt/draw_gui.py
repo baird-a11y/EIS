@@ -95,8 +95,8 @@ class Star(VectorShape):
             else:
                 radius = inner_radius * 0.4  # 40% vom äußeren
             
-            x = center_x + radius * cos(winkel-π/2)  # cos(winkel-π/2) für korrekte Ausrichtung
-            y = center_y + radius * sin(winkel-π/2)  # sin(winkel-π/2) für korrekte Ausrichtung
+            x = center_x + radius * cos(winkel)  # cos(winkel-π/2) für korrekte Ausrichtung
+            y = center_y + radius * sin(winkel)  # sin(winkel-π/2) für korrekte Ausrichtung
             star_points.append(QPoint(int(x), int(y)))
         # TODO: QPolygon erstellen und zeichnen
         polygon = QPolygon(star_points)  # Erstelle ein Polygon aus den Punkten
