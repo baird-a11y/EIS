@@ -44,7 +44,7 @@ class DatumUS(Datum):
     
     def print_date(self):
         """Ausführliche US-Ausgabe: December 24 2024"""
-        monatsname = self.MONATE[self.monat - 1]  # -1 weil Array bei 0 startet
+        monatsname = self.MONTHS[self.monat - 1]  # -1 weil Array bei 0 startet
         print(f"{monatsname} {self.tag} {self.jahr}")
     
     def print_date_short(self):
@@ -53,7 +53,7 @@ class DatumUS(Datum):
         print(f"{self.monat}/{self.tag}/{jahr_kurz:02d}")
 
 
-class DatumEU(Datum):
+class DatumDE(Datum):
     """Datum im deutschen Format"""
     
     # Deutsche Monatsnamen
@@ -623,6 +623,13 @@ def main():
     # Hauptfenster erstellen und anzeigen
     main_window = VectorGraphicsWindow()
     main_window.show()
+    # Datum-Objekte erstellen und ausgeben
+    datum_us = DatumUS(24, 12, 2024)
+    datum_us.print_date()  # Ausführliche US-Ausgabe
+    datum_us.print_date_short()  # Kurze US-Ausgabe
+    datum_de = DatumDE(24, 12, 2024)
+    datum_de.print_date()  # Ausführliche deutsche Ausgabe
+    datum_de.print_date_short()  # Kurze deutsche Ausgabe
     
     # Event-Loop starten
     return app.exec()
