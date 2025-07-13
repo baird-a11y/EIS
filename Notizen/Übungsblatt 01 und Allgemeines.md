@@ -131,6 +131,7 @@ object CountDown {
     }
 }
 ```
+Um Scala Code ausführen zu können muss ich scala-cli [FileName]].scala nutzen.
 
 #### Teil b) Primzahltest (50 Punkte)
 
