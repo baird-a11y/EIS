@@ -14,9 +14,66 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget,
 from PySide6.QtWidgets import QHBoxLayout
 from PySide6.QtWidgets import QDialog, QGridLayout, QSpinBox, QPushButton, QLabel
 from math import sin, cos, pi as π
+from abc import ABC, abstractmethod
 import sys
 
-class VectorShape:
+# Abstrake Klasse für Datum mit zwei Unterklassen DatumUS und DatumEU
+class Datum(ABC):
+    """Abstrakte Basisklasse für Datum"""
+    def __init__(self, tag, monat, jahr):
+        self.tag = tag
+        self.monat = monat
+        self.jahr = jahr
+    
+    @abstractmethod
+    def print_date(self):
+        """Gibt das Datum ausführlich aus (z.B. 24. Dezember 2024)"""
+        pass
+    
+    @abstractmethod
+    def print_date_short(self):
+        """Gibt das Datum kurz aus (z.B. 24.12.2024)"""
+        pass
+class DatumUS(Datum):
+    """Datum im US-Format (MM/TT/JJJJ)"""
+    MONTHS = [
+        "Januar", "Februar", "März", "April", "Mai", 
+        "Juni", "Juli", "August", "September", 
+        "Oktober", "November", "Dezember"
+    ] # Liste der Monatsnamen als Klassenattribut
+    
+    def print_date(self):
+        """Ausführliche US-Ausgabe: December 24 2024"""
+        monatsname = self.MONATE[self.monat - 1]  # -1 weil Array bei 0 startet
+        print(f"{monatsname} {self.tag} {self.jahr}")
+    
+    def print_date_short(self):
+        """Kurze US-Ausgabe: 12/24/24"""
+        jahr_kurz = self.jahr % 100  # Nur die letzten zwei Ziffern
+        print(f"{self.monat}/{self.tag}/{jahr_kurz:02d}")
+
+
+class DatumEU(Datum):
+    """Datum im deutschen Format"""
+    
+    # Deutsche Monatsnamen
+    MONATE = ["Januar", "Februar", "März", "April", "Mai", "Juni",
+              "Juli", "August", "September", "Oktober", "November", "Dezember"]
+    
+    def print_date(self):
+        """Ausführliche deutsche Ausgabe: 24. Dezember 2024"""
+        monatsname = self.MONATE[self.monat - 1]
+        print(f"{self.tag}. {monatsname} {self.jahr}")
+    
+    def print_date_short(self):
+        """Kurze deutsche Ausgabe: 24.12.24"""
+        jahr_kurz = self.jahr % 100
+        print(f"{self.tag:02d}.{self.monat:02d}.{jahr_kurz:02d}")
+
+    
+
+
+class VectorShape(ABC):
     """Basisklasse für alle geometrischen Primitive"""
     
     def __init__(self, x, y, width, height):
@@ -28,12 +85,35 @@ class VectorShape:
         self.line_width = 2  # Standard Linienstärke
         self.fill_color = QColor(255, 255, 255) # Standard Füllfarbe (weiß)
 
-    
+    @abstractmethod
     def draw(self, painter, zoom, offset_x, offset_y):
         """Wird in Unterklassen überschrieben"""
 
-        pass
+    @abstractmethod
+    def hit_test(self,  point_x, point_y) -> bool:
+        """Prüft, ob der Punkt innerhalb des Objekts liegt"""
+    
+    def set_position(self, x, y):
+        """Setzt die Position des Objekts"""
+        self.x = x
+        self.y = y
 
+    def set_size(self, width, height):
+        """Setzt die Größe des Objekts"""
+        self.width = width
+        self.height = height
+
+    def move(self, dx, dy):
+        """Verschiebt das Objekt um dx, dy"""
+        self.x += dx
+        self.y += dy
+
+    def scale(self, factor_x, factor_y):
+        """Skaliert das Objekt um die gegebenen Faktoren"""
+        self.width *= factor_x
+        self.height *= factor_y
+    
+    
 class Rectangle(VectorShape):
     def draw(self, painter, zoom, offset_x, offset_y):
         # TODO: Koordinaten transformieren (unsere Formel!)
@@ -52,8 +132,12 @@ class Rectangle(VectorShape):
         # TODO: Rechteck zeichnen
         # Zeichne das Rechteck
         painter.drawRect(x,y,w,h)
+
+    def hit_test(self, point_x, point_y):
+            return (self.x <= point_x <= self.x + self.width and 
+                self.y <= point_y <= self.y + self.height)
         
-        pass
+        
 class Circle(VectorShape):
     def draw(self, painter, zoom, offset_x, offset_y):
         # TODO: Gleiche Koordinaten-Transformation
@@ -68,8 +152,12 @@ class Circle(VectorShape):
         painter.setPen(pen)
         painter.setBrush(brush)
 
-        painter.drawEllipse(x,y,w,h) 
-        pass
+        painter.drawEllipse(x,y,w,h)
+
+    def hit_test(self, point_x, point_y):
+        return (self.x <= point_x <= self.x + self.width and 
+                self.y <= point_y <= self.y + self.height) 
+        
 
 class Star(VectorShape):
     def __init__(self, x, y, width, height, points=5):
@@ -104,8 +192,12 @@ class Star(VectorShape):
         brush = QColor(self.fill_color)  # Setze die Füllfarbe
         painter.setPen(pen)
         painter.setBrush(brush)  # Setze den Pinsel
-        painter.drawPolygon(polygon)  # Zeichne das Polygon 
-        pass
+        painter.drawPolygon(polygon)  # Zeichne das Polygon
+
+    def hit_test(self, point_x, point_y):
+        return (self.x <= point_x <= self.x + self.width and 
+                self.y <= point_y <= self.y + self.height) 
+    
 
 class VectorGraphicsArea(QWidget):
     """Widget für Zeichenfunktionen mit Maus-Unterstützung"""
@@ -455,7 +547,6 @@ class VectorGraphicsWindow(QMainWindow):
 
     def add_rectangle(self):
         """Dialog für neues Rechteck"""
-    
     
         dialog = QDialog(self)
         dialog.setWindowTitle("Rechteck hinzufügen")
