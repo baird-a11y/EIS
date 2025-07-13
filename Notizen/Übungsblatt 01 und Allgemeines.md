@@ -150,40 +150,39 @@ return true (ist Primzahl)
 
 ##### Python (mit Type Hints)
 ```python
-import math
-import time
+from math import sqrt
 
-def is_prime(n: int) -> bool:
+def ist_primzahl(zahl: int) -> bool:
     """
-    Prüft, ob eine Zahl eine Primzahl ist.
-    Verwendet naive Methode: Teste alle Teiler bis √n
+    Prüft effizient, ob eine Zahl eine Primzahl ist.
+    
+    Args:
+        zahl: Die zu prüfende Zahl
+        
+    Returns:
+        True wenn Primzahl, False sonst
     """
-    if n < 2:
+    # Spezialfälle
+    if zahl < 2:
         return False
-    if n == 2:
+    if zahl == 2:
         return True
-    if n % 2 == 0:
+    if zahl % 2 == 0:  # Alle geraden Zahlen > 2 sind keine Primzahlen
         return False
     
-    # Teste ungerade Teiler von 3 bis √n
-    for i in range(3, int(math.sqrt(n)) + 1, 2):
-        if n % i == 0:
+    # Nur ungerade Zahlen von 3 bis sqrt(zahl) prüfen
+    for i in range(3, int(sqrt(zahl)) + 1, 2):
+        if zahl % i == 0:
             return False
+    
     return True
 
-def main():
-    test_number = 10007 * 100003  # 1000700021
-    
-    start_time = time.time()
-    result = is_prime(test_number)
-    end_time = time.time()
-    
-    print(f"Zahl: {test_number}")
-    print(f"Ist Primzahl: {result}")
-    print(f"Laufzeit: {(end_time - start_time) * 1000:.2f} ms")
-
-if __name__ == "__main__":
-    main()
+# Test
+zahl = 13
+if ist_primzahl(zahl):
+    print(f"{zahl} ist eine Primzahl.")
+else:
+    print(f"{zahl} ist keine Primzahl.")
 ```
 
 ##### C++
@@ -192,33 +191,34 @@ if __name__ == "__main__":
 #include <cmath>
 #include <chrono>
 
-bool is_prime(long long n) {
-    if (n < 2) return false;
-    if (n == 2) return true;
-    if (n % 2 == 0) return false;
-    
-    // Teste ungerade Teiler von 3 bis √n
-    for (long long i = 3; i <= sqrt(n); i += 2) {
-        if (n % i == 0) {
-            return false;
-        }
-    }
-    return true;
-}
+using namespace std;
 
 int main() {
-    long long test_number = 10007LL * 100003LL; // 1000700021
+    int n = 11; // Zu testende Zahl
     
-    auto start = std::chrono::high_resolution_clock::now();
-    bool result = is_prime(test_number);
-    auto end = std::chrono::high_resolution_clock::now();
+    // Spezialfall: Zahlen < 2 sind keine Primzahlen
+    if (n < 2) {
+        cout << "Not Prime\n";
+        return 0;
+    }
     
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    // Spezialfall: 2 ist eine Primzahl
+    if (n == 2) {
+        cout << "Prime\n";
+        return 0;
+    }
     
-    std::cout << "Zahl: " << test_number << std::endl;
-    std::cout << "Ist Primzahl: " << (result ? "true" : "false") << std::endl;
-    std::cout << "Laufzeit: " << duration.count() / 1000.0 << " ms" << std::endl;
+    // Teste alle möglichen Teiler von 2 bis sqrt(n)
+    int i = 2;
+    while (i * i <= n) {  // Effizienter als sqrt(n)
+        if (n % i == 0) {
+            cout << "Not Prime\n";
+            return 0;
+        }
+        i++;
+    }
     
+    cout << "Prime\n";
     return 0;
 }
 ```
@@ -250,7 +250,6 @@ public class PrimeTest {
         
         System.out.println("Zahl: " + testNumber);
         System.out.println("Ist Primzahl: " + result);
-        System.out.println("Laufzeit: " + (endTime - startTime) + " ms");
     }
 }
 ```
@@ -275,13 +274,9 @@ object PrimeTest {
     def main(args: Array[String]): Unit = {
         val testNumber: Long = 10007L * 100003L // 1000700021
         
-        val startTime = System.currentTimeMillis()
-        val result = isPrime(testNumber)
-        val endTime = System.currentTimeMillis()
-        
+              
         println(s"Zahl: $testNumber")
         println(s"Ist Primzahl: $result")
-        println(s"Laufzeit: ${endTime - startTime} ms")
     }
 }
 ```
