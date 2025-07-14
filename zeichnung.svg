@@ -1,0 +1,28 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <polygon points="50,50 150,50 150,130" fill="none" stroke="black" />
+  <polygon points="50,50 150,130 50,130" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 180.0,240.0 174.64101615137756,260.0" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 174.64101615137756,260.0 160.0,274.6410161513775" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 160.0,274.6410161513775 140.0,280.0" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 140.0,280.0 120.0,274.6410161513775" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 120.0,274.6410161513775 105.35898384862246,260.0" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 105.35898384862246,260.0 100.0,240.0" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 100.0,240.0 105.35898384862244,220.0" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 105.35898384862244,220.0 119.99999999999999,205.35898384862247" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 119.99999999999999,205.35898384862247 140.0,200.0" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 140.0,200.0 159.99999999999997,205.35898384862244" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 159.99999999999997,205.35898384862244 174.64101615137753,219.99999999999997" fill="none" stroke="black" />
+  <polygon points="140.0,240.0 174.64101615137753,219.99999999999997 180.0,240.0" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 390.0,80.0 385.98076211353316,95.0" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 385.98076211353316,95.0 375.0,105.98076211353316" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 375.0,105.98076211353316 360.0,110.0" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 360.0,110.0 345.0,105.98076211353316" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 345.0,105.98076211353316 334.01923788646684,95.00000000000001" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 334.01923788646684,95.00000000000001 330.0,80.0" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 330.0,80.0 334.01923788646684,65.00000000000001" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 334.01923788646684,65.00000000000001 345.0,54.01923788646685" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 345.0,54.01923788646685 360.0,50.0" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 360.0,50.0 375.0,54.019237886466826" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 375.0,54.019237886466826 385.98076211353316,64.99999999999999" fill="none" stroke="black" />
+  <polygon points="360.0,80.0 385.98076211353316,64.99999999999999 390.0,79.99999999999999" fill="none" stroke="black" />
+</svg>

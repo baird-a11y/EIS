@@ -6,16 +6,104 @@
 EIS SoSem 2025
 """
 
-from PySide6.QtCore import Qt, QPoint, QRect
-from PySide6.QtGui import QKeySequence, QAction, QImage, QColor, QPainter, QPen, QPolygon
+from PySide6.QtCore import Qt, QPoint, QRect, QSize
+from PySide6.QtGui import QKeySequence, QAction, QImage, QColor, QPainter, QPen, QPolygon, QFont
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, 
                               QVBoxLayout, QFrame, QMenuBar, QToolBar,
                               QMessageBox, QFileDialog)
 from PySide6.QtWidgets import QHBoxLayout
 from PySide6.QtWidgets import QDialog, QGridLayout, QSpinBox, QPushButton, QLabel
+
+
 from math import sin, cos, pi as π
 from abc import ABC, abstractmethod
+from typing import List, Tuple
 import sys
+
+# Typ-Definitionen für bessere Lesbarkeit
+Point = Tuple[float, float]
+Triangle = Tuple[Point, Point, Point]
+
+
+def subdivide_triangles(triangles: List[Triangle], n_times: int = 1) -> List[Triangle]:
+        """Wendet Subdivision n-mal auf alle Dreiecke an"""
+        result = triangles
+        for i in range(n_times):
+            new_triangles = []
+            for triangle in result:
+                # Wende Subdivision auf jedes Dreieck an
+                # und füge die neuen Dreiecke zur Liste hinzu
+                new_triangles.extend(subdivide_triangle(triangle))
+            result = new_triangles
+        return result
+
+def subdivide_triangle(triangle: Triangle) -> List[Triangle]:
+        """Wendet Subdivision n-mal auf alle Dreiecke an"""
+        p1,p2,p3 = triangle
+
+        # Mittelpunkte der Seiten berechnen
+        mid1 = ((p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2)  # Mitte zwischen p1 und p2
+        mid2 = ((p2[0] + p3[0]) / 2, (p2[1] + p3[1]) / 2)  # Mitte zwischen p2 und p3
+        mid3 = ((p1[0] + p3[0]) / 2, (p1[1] + p3[1]) / 2)  # Mitte zwischen p1 und p3
+
+        # Neue Dreiecke erstellen
+        triangle1 = (p1,mid1, mid3) # Erstes neues Dreieck
+        triangle2 = (mid1, p2, mid2)  # Zweites neues Dreieck
+        triangle3 = (mid2, p3, mid3)  # Drittes neues Dreieck
+        triangle4 = (mid1, mid2, mid3)  # Vierte neues Dreieck
+
+        return [triangle1, triangle2, triangle3, triangle4]  # Liste der neuen Dreiecke zurückgeben
+
+
+def sine_wave_deform_triangles(triangles: List[Triangle], 
+                              amplitude: float = 50.0, 
+                              wavelength: float = 200.0, 
+                              phase: float = 0.0) -> List[Triangle]:
+    """Wendet Sine-Wave Deformation auf alle Dreiecke an"""
+    deformed_triangles = []
+    
+    for triangle in triangles:
+        p1, p2, p3 = triangle
+        
+        # Nutze die bereits existierende Funktion!
+        new_p1 = sine_wave_deform_point(p1, amplitude, wavelength, phase)
+        new_p2 = sine_wave_deform_point(p2, amplitude, wavelength, phase)
+        new_p3 = sine_wave_deform_point(p3, amplitude, wavelength, phase)
+        
+        deformed_triangle = (new_p1, new_p2, new_p3)
+        deformed_triangles.append(deformed_triangle)
+    
+    return deformed_triangles
+
+def sine_wave_deform_point(point: Point, amplitude: float = 50.0, 
+                          wavelength: float = 200.0, phase: float = 0.0) -> Point:
+    """Deformiert einen Punkt entlang einer Sinuskurve"""
+    x, y = point
+    y_offset = amplitude * sin(2 * π * x / wavelength + phase)
+    return (x, y + y_offset)
+
+def export_triangles_as_text(triangles: List[Triangle], filename: str = "triangles.txt"):
+    with open(filename, "w") as file:  # ← Nur EINMAL öffnen, "w" statt "a"
+        for i, triangle in enumerate(triangles):  # ← enumerate() ist eleganter
+            p1, p2, p3 = triangle
+            file.write(f"Triangle {i} ({p1[0]}, {p1[1]}), ({p2[0]}, {p2[1]}), ({p3[0]}, {p3[1]})\n")
+
+
+def export_triangles_as_svg(triangles: List[Triangle], filename: str = "output.svg", width=800, height=600):
+    with open(filename, "w") as file:
+        file.write(f'<svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">\n')
+        
+        for triangle in triangles:
+            # TODO: Punkte zu String konvertieren
+            p1, p2, p3 = triangle
+            p1_str = f"{p1[0]},{p1[1]}"
+            p2_str = f"{p2[0]},{p2[1]}"
+            p3_str = f"{p3[0]},{p3[1]}"
+            # TODO: Polygon-Element schreiben
+            file.write(f'  <polygon points="{p1_str} {p2_str} {p3_str}" fill="none" stroke="black" />\n')
+        # TODO: SVG Footer schreiben
+        file.write('</svg>\n')
+
 
 # Abstrake Klasse für Datum mit zwei Unterklassen DatumUS und DatumEU
 class Datum(ABC):
@@ -92,6 +180,11 @@ class VectorShape(ABC):
     @abstractmethod
     def hit_test(self,  point_x, point_y) -> bool:
         """Prüft, ob der Punkt innerhalb des Objekts liegt"""
+
+    @abstractmethod
+    def describe_shape(self) -> List[Triangle]:
+        """Beschreibt die Shape als Liste von Dreiecken"""
+        pass
     
     def set_position(self, x, y):
         """Setzt die Position des Objekts"""
@@ -112,6 +205,11 @@ class VectorShape(ABC):
         """Skaliert das Objekt um die gegebenen Faktoren"""
         self.width *= factor_x
         self.height *= factor_y
+
+    
+
+    
+    
     
     
 class Rectangle(VectorShape):
@@ -136,7 +234,24 @@ class Rectangle(VectorShape):
     def hit_test(self, point_x, point_y):
             return (self.x <= point_x <= self.x + self.width and 
                 self.y <= point_y <= self.y + self.height)
+    
+    def describe_shape(self):
+        # Gibt die Form als Liste von Dreiecken zurück
+        # Ein Rechteck kann in zwei Dreiecke unterteilt werden:
+        p1 = (self.x, self.y) # Oben Links (A)
+        p2 = (self.x+self.width, self.y) # Oben Rechts (B)
+        p3 = (self.x+self.width, self.y+self.height) # Unten Rechts (C)
+        p4 = (self.x, self.y+self.height) # Unten Links (D
         
+        # Dreicke 1 ABC
+        Triangle_1 = (p1, p2, p3)
+
+        # Dreieck 2 ACD
+        Triangle_2 = (p1, p3, p4)
+
+        return [Triangle_1, Triangle_2]  # Liste der Dreiecke zurückgeben
+    
+    
         
 class Circle(VectorShape):
     def draw(self, painter, zoom, offset_x, offset_y):
@@ -156,7 +271,36 @@ class Circle(VectorShape):
 
     def hit_test(self, point_x, point_y):
         return (self.x <= point_x <= self.x + self.width and 
-                self.y <= point_y <= self.y + self.height) 
+                self.y <= point_y <= self.y + self.height)
+    
+    def describe_shape(self):
+        # Mittelpunkt berechnen (von der oberen linken Ecke der Bounding Box)
+        center_x = self.x + self.width/2 # Da ich oben in der Ecke anfange muss ich noch zu dem Punkt gehen
+        center_y = self.y + self.height/2
+        center_point = (center_x, center_y)
+        radius = min(self.width, self.height)/2
+        
+        num_triangles = 12
+        triangles = []
+        
+        for i in range(num_triangles):
+            angle1 = i * (2 * π / num_triangles)
+            angle2 = (i + 1) * (2 * π / num_triangles)  # ← WICHTIG!
+            
+            # Zwei aufeinanderfolgende Punkte auf dem Rand
+            x1 = center_x + radius * cos(angle1)
+            y1 = center_y + radius * sin(angle1)
+            point1 = (x1, y1)
+            
+            x2 = center_x + radius * cos(angle2)
+            y2 = center_y + radius * sin(angle2)
+            point2 = (x2, y2)
+            
+            # Dreieck: Mittelpunkt → Punkt1 → Punkt2
+            triangle = (center_point, point1, point2)
+            triangles.append(triangle)
+    
+        return triangles  # ← Nicht [triangles]!
         
 
 class Star(VectorShape):
@@ -224,10 +368,16 @@ class VectorGraphicsArea(QWidget):
         self.shapes.append(Circle(100, 200, 80, 80))  # Kreis (width=height)
         self.shapes.append(Circle(300, 50, 120, 60))  # Ellipse (width≠height)
 
-        self.shapes.append(Star(200, 200, 100, 100, points=5))  # Sechszackiger Stern   
+        #self.shapes.append(Star(200, 200, 100, 100, points=5))  # Sechszackiger Stern   
         # Mindestgröße festlegen
         self.setMinimumSize(640, 480)
-        
+
+        rect = Rectangle(100, 100, 200, 150)
+        triangles = rect.describe_shape()           # 2 Dreiecke
+        subdivided = subdivide_triangles(triangles, 2)  # 32 Dreiecke  
+        deformed = sine_wave_deform_triangles(subdivided, 30, 300)  # Wellenform!
+        export_triangles_as_text(deformed)
+        export_triangles_as_svg(deformed, "output.svg", width=800, height=600)  # Exportiere als SVG
         
         
         # Mouse-Tracking aktivieren für mouseMoveEvent
@@ -332,6 +482,32 @@ class VectorGraphicsArea(QWidget):
         self.shapes.clear()
         self.update()
 
+    def save_image(self, file_path: str) -> bool:
+        """Speichert die aktuelle Zeichnung als Bilddatei"""
+        try:
+            # Erstelle ein QImage in der Größe des Widgets
+            image = QImage(self.size(), QImage.Format.Format_ARGB32)
+            image.fill(Qt.GlobalColor.white)  # Weißer Hintergrund
+            
+            # Zeichne alles auf das QImage
+            painter = QPainter(image)
+            for shape in self.shapes:
+                shape.draw(painter, self.zoom_factor, self.offset_x, self.offset_y)
+            painter.end()
+            
+            # Speichere das Bild
+            return image.save(file_path)
+            
+        except Exception as e:
+            print(f"Fehler beim Speichern: {e}")
+            return False
+    
+    def load_image(self, image: QImage):
+        """Lädt ein Bild als Hintergrund (optional)"""
+        # Das ist optional - meist will man das Bild nur anzeigen
+        self.background_image = image
+        self.update()  # Widget neu zeichnen
+
 class VectorGraphicsWindow(QMainWindow):
     """Hauptfenster der Anwendung"""
     
@@ -419,6 +595,11 @@ class VectorGraphicsWindow(QMainWindow):
         self.quit_action.setShortcut(QKeySequence.StandardKey.Quit)
         self.quit_action.triggered.connect(self.close)
         file_menu.addAction(self.quit_action)
+
+        self.save_action = QAction("&Speichern unter...", self)
+        self.save_action.setShortcut(QKeySequence.StandardKey.SaveAs)
+        self.save_action.triggered.connect(self.export_svg)
+        file_menu.addAction(self.save_action)
     
     def create_toolbar(self):
         """Erstellt eine Toolbar mit den gleichen Aktionen wie das Menü"""
@@ -468,18 +649,18 @@ class VectorGraphicsWindow(QMainWindow):
                 QMessageBox.critical(self, "Fehler", f"Fehler beim Laden der Datei:\n{str(e)}")
     
     def save_file_as(self):
-        """Speichern Als Dialog - speichert das gezeichnete Bild als PNG"""
+        """Speichern Als Dialog - speichert das gezeichnete Bild als PNG, JPEG oder SVG"""
         file_path, _ = QFileDialog.getSaveFileName(
             self, 
             "Bild speichern", 
             "zeichnung.png", 
-            "PNG Files (*.png);;JPEG Files (*.jpg);;Alle Dateien (*.*)"
+            "PNG Files (*.png);;JPEG Files (*.jpg);;SVG Files (*.svg);;Alle Dateien (*.*)"
         )
         
         if file_path:
             try:
                 # Stelle sicher, dass die Datei eine .png Endung hat
-                if not file_path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp')):
+                if not file_path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp','svg')):
                     file_path += '.png'
                 
                 # Bild speichern
@@ -614,6 +795,36 @@ class VectorGraphicsWindow(QMainWindow):
         
         # Dialog anzeigen
         dialog.exec()
+
+    def export_svg(self):
+        """SVG-Export Dialog"""
+        file_path, _ = QFileDialog.getSaveFileName(
+            self, 
+            "Als SVG exportieren", 
+            "zeichnung.svg", 
+            "SVG Files (*.svg);;Alle Dateien (*.*)"
+        )
+        
+        if file_path:
+            try:
+                # Stelle sicher, dass die Datei eine .svg Endung hat
+                if not file_path.lower().endswith('.svg'):
+                    file_path += '.svg'
+                
+                # Alle Shapes zu Dreiecken konvertieren
+                all_triangles = []
+                for shape in self.graphics_area.shapes:
+                    triangles = shape.describe_shape()
+                    all_triangles.extend(triangles)
+                
+                # SVG exportieren (deine Funktion!)
+                export_triangles_as_svg(all_triangles, file_path)
+                
+                QMessageBox.information(self, "Erfolg", f"SVG erfolgreich exportiert:\n{file_path}")
+                
+            except Exception as e:
+                QMessageBox.critical(self, "Fehler", f"Fehler beim SVG-Export:\n{str(e)}")
+    
 
 
 def main():
