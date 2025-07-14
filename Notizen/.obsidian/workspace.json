@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "📚 Objektorientierte Programmierung (OOP) - Komplette Zusammenfassung.md",
+                "file": "Funktionale Programmierung.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "📚 Objektorientierte Programmierung (OOP) - Komplette Zusammenfassung"
+              "title": "Funktionale Programmierung"
             }
           }
         ]
@@ -170,9 +170,11 @@
   },
   "active": "f5f5f61faaa5bf31",
   "lastOpenFiles": [
-    "Klausuraufgaben - Übungsblatt 03 (Vektorgrafik).md",
     "📚 Objektorientierte Programmierung (OOP) - Komplette Zusammenfassung.md",
+    "Funktionale Programmierung.md",
     "Übungsblatt 03.md",
+    "Übungsblatt 04 - Vektorgrafik OOP - Musterlösung.md",
+    "Klausuraufgaben - Übungsblatt 03 (Vektorgrafik).md",
     "Übungsblatt 03 - Vektorgrafik prozedural - Musterlösung.md",
     "Übungsblatt 02 - GUI Programmierung - Musterlösung.md"
   ]
