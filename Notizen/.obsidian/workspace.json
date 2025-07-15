@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Funktionale Programmierung.md",
+                "file": "Übungsblatt 07.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Funktionale Programmierung"
+              "title": "Übungsblatt 07"
             }
           }
         ]
@@ -44,7 +44,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "Dateiexplorer"
             }
           },
           {
@@ -160,19 +160,20 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "switcher:Schnellauswahl öffnen": false,
+      "graph:Graphen-Ansicht öffnen": false,
+      "canvas:Neuen Canvas erstellen": false,
+      "daily-notes:Heutige Notiz öffnen": false,
+      "templates:Vorlage einfügen": false,
+      "command-palette:Befehlspalette öffnen": false
     }
   },
-  "active": "f5f5f61faaa5bf31",
+  "active": "8d347df179f5b27d",
   "lastOpenFiles": [
+    "Funktionale Programmierung.md",
+    "Übungsblatt 07.md",
     "Übungsblatt 04 - Vektorgrafik OOP - Musterlösung.md",
     "Übungsblatt 06.md",
-    "Funktionale Programmierung.md",
     "📚 Objektorientierte Programmierung (OOP) - Komplette Zusammenfassung.md",
     "Übungsblatt 03.md",
     "Klausuraufgaben - Übungsblatt 03 (Vektorgrafik).md",
