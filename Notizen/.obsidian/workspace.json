@@ -4,21 +4,41 @@
     "type": "split",
     "children": [
       {
-        "id": "406ff4219cfd2879",
+        "id": "4705c5bbae63983f",
         "type": "tabs",
         "children": [
           {
-            "id": "f5f5f61faaa5bf31",
+            "id": "bc6de7418ccc988a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "3. GUIs.md",
-                "mode": "preview",
+                "file": "EiS Klausur Spickzettel.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "3. GUIs"
+              "title": "EiS Klausur Spickzettel"
+            }
+          }
+        ]
+      },
+      {
+        "id": "2466a091063dd756",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f7480df0263b72ca",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "EiS - Einführung in die Softwareentwicklung.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "EiS - Einführung in die Softwareentwicklung"
             }
           }
         ]
@@ -168,14 +188,25 @@
       "command-palette:Befehlspalette öffnen": false
     }
   },
-  "active": "f5f5f61faaa5bf31",
+  "active": "f7480df0263b72ca",
   "lastOpenFiles": [
-    "2. Paradigmen.md",
-    "1. Grundlagen.md",
-    "0. Index.md",
-    "4. Vektorgrafik Prozedural.md",
+    "Einführung in die Softwareentwicklung - Klausurvorbereitung.md",
+    "EiS - Einführung in die Softwareentwicklung.md",
+    "EiS Klausur Spickzettel.md",
+    "6. Funktional.md",
     "5. OOP.md",
+    "Aufgabensammlung Grundlagen.md",
+    "EiS Übungsaufgaben - Übungsblätter 01 & 02.md",
+    "Übungseinheit 5 Objektorientierte Programmierung (OOP).md",
+    "1. Grundlagen.md",
     "3. GUIs.md",
+    "0. Index.md",
+    "2. Paradigmen.md",
+    "2..md",
+    "7. Performance.md",
+    "8. Client Server.md",
+    "eis_client_server (1).md",
+    "4. Vektorgrafik Prozedural.md",
     "Funktionale Programmierung.md",
     "Übungsblatt 07.md",
     "Übungsblatt 04 - Vektorgrafik OOP - Musterlösung.md",
