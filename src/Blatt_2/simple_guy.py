@@ -110,8 +110,6 @@ class MainWindow(QMainWindow):
     def open_action(self):
         pass
 
-    def open_action(self):
-        pass
     def create_toolbar(self):
         self.main_toolbar = self.addToolBar("ToolBar Test")
 
